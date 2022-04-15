@@ -1,23 +1,34 @@
 import ContactItem from './ContactItem';
+import Message from 'components/Message';
+import Filter from './Filter';
 import PropTypes from 'prop-types';
 
-const ContactList = ({ contacts, onDeleteContact }) => {
+const ContactList = ({ contacts, onDeleteContact, filter, onInputEntry }) => {
   return (
-    <ul>
-      {contacts.map(contact => (
-        <ContactItem
-          key={contact.id}
-          contact={contact}
-          deleteContact={onDeleteContact}
-        />
-      ))}
-    </ul>
+    <>
+      <Filter filter={filter} onInputEntry={onInputEntry} />
+      {contacts.length > 0 ? (
+        <ul>
+          {contacts.map(contact => (
+            <ContactItem
+              key={contact.id}
+              contact={contact}
+              deleteContact={onDeleteContact}
+            />
+          ))}
+        </ul>
+      ) : (
+        <Message text={'The contact was not found o_O'} />
+      )}
+    </>
   );
 };
 
 ContactList.propTypes = {
-  contacts: PropTypes.array.isRequired,
-  onDeleteContact: PropTypes.func.isRequired,
+  contacts: PropTypes.array,
+  onDeleteContact: PropTypes.func,
+  filter: PropTypes.string,
+  onInputEntry: PropTypes.func,
 };
 
 export default ContactList;

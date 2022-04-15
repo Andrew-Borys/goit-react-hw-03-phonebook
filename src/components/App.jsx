@@ -1,9 +1,11 @@
 import { Component } from 'react';
+import Title from './Title';
 import ContactForm from './ContactForm';
 import ContactList from './ContactList';
-import Filter from './Filter';
-import Message from './Message';
 import { nanoid } from 'nanoid';
+import Message from './Message';
+
+const LS_KEY = 'My_contacts';
 
 export class App extends Component {
   state = {
@@ -19,6 +21,23 @@ export class App extends Component {
   };
 
   contactId = () => nanoid();
+
+  componentDidMount() {
+    const localContacts = localStorage.getItem(LS_KEY);
+    console.log(localContacts);
+
+    if (localContacts) {
+      console.log('we have contact list from local storage');
+      const local = JSON.parse(localContacts);
+      this.setState({ contacts: local });
+    }
+  }
+
+  componentDidUpdate(prevState) {
+    const { contacts } = this.state;
+    console.log(contacts);
+    localStorage.setItem(LS_KEY, JSON.stringify(contacts));
+  }
 
   handleSubmitFormData = data => {
     if (
@@ -65,22 +84,24 @@ export class App extends Component {
   };
 
   render() {
-    const { filter } = this.state;
-    const fiteredContacts = this.getFilteredContact();
+    // this.getFilteredContact();
+    const { filter, contacts } = this.state;
+    // console.log(this.getFilteredContact());
 
     return (
       <div>
-        <h1>Phonebook</h1>
+        <Title text={'Phonebook'} />
         <ContactForm onSubmit={this.handleSubmitFormData} />
-        <h2>Contacts</h2>
-        <Filter filter={filter} onInputEntry={this.inputFilterContact} />
-        {fiteredContacts < 1 ? (
-          <Message text={'The contact was not found ;(((('} />
-        ) : (
+        <Title text={'Contacts'} />
+        {contacts.length > 0 ? (
           <ContactList
-            contacts={fiteredContacts}
+            contacts={this.getFilteredContact()}
             onDeleteContact={this.handleDeleteContact}
+            filter={filter}
+            onInputEntry={this.inputFilterContact}
           />
+        ) : (
+          <Message text={'Oooops, the contact list is empty ¯_(ツ) _/¯'} />
         )}
       </div>
     );
