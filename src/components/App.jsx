@@ -23,19 +23,19 @@ export class App extends Component {
   contactId = () => nanoid();
 
   componentDidMount() {
+    console.log('MOUNT');
     const localContacts = localStorage.getItem(LS_KEY);
-    console.log(localContacts);
 
     if (localContacts) {
-      console.log('we have contact list from local storage');
       const local = JSON.parse(localContacts);
       this.setState({ contacts: local });
     }
   }
 
   componentDidUpdate(prevState) {
+    console.log('UPDATE');
+
     const { contacts } = this.state;
-    console.log(contacts);
     localStorage.setItem(LS_KEY, JSON.stringify(contacts));
   }
 
