@@ -1,6 +1,6 @@
-import ContactItem from './ContactItem';
+import ContactItem from '../ContactItem';
 import Message from 'components/Message';
-import Filter from './Filter';
+import Filter from '../Filter';
 import PropTypes from 'prop-types';
 
 const ContactList = ({ contacts, onDeleteContact, filter, onInputEntry }) => {
